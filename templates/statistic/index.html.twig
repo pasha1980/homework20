@@ -19,7 +19,7 @@
         <tbody>
         {% for statistic in statistics %}
             <tr>
-                <td>{{ statistic.id }}</td>
+                <td>{{ statistic.link.id }}</td>
                 <td>{{ statistic.userAgent }}</td>
                 <td>{{ statistic.ip }}</td>
                 <td>{{ statistic.createdAt ? statistic.createdAt|date('Y-m-d H:i:s') : '' }}</td>

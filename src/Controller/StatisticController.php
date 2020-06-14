@@ -23,6 +23,7 @@ class StatisticController extends AbstractController
         return $this->render('statistic/index.html.twig', [
             'statistics' => $statisticRepository->findAll(),
         ]);
+//        dump($statisticRepository->findAll());die;
     }
 
 //    /**
