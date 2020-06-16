@@ -29,7 +29,7 @@
                 <td><a href="/r/{{ link.shortCode }}">{{ link.shortCode }}</a></td>
                 <td>{{ link.createdAt.format('m/d/Y') }}</td>
                 <td>{{ link.updatedAt.format('m/d/Y') }}</td>
-                <td><a href="{{ path('short_link_delete', {shortLink: link.id}) }}" class="btn btn-danger">Delete</a></td>
+                <td><a href="{{ path('short_link_delete', {shortLink: link.id}) }}" class="btn btn-danger" onClick="return window.confirm('Вы уверены, что хотите удалить этот шортлинк ?');">Delete</a></td>
                 <td><a href="{{ path('short_link_edit', {shortLink: link.id}) }}" class="btn btn-primary">Edit</a></td>
             </tr>
             {% endfor %}

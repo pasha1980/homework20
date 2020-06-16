@@ -5,11 +5,9 @@ namespace App\Controller;
 
 
 use App\Entity\ShortLink;
+use App\Form\ShortLinkCreate;
 use App\Form\ShortLinkType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -35,34 +33,23 @@ class ShortLinkCrudController extends AbstractController
      */
     public function create(Request $request)
     {
-//        $form = $this->createForm(ShortLinkType::class, new ShortLink());
-        $shortCode = $this ->createShortLink(5);
-
-        $formBuilder = $this->createFormBuilder()
-            ->add('fullUrl', TextType::class)
-            ->add('shortCode', TextType::class, [
-                'data' => $shortCode,
-                'disabled' => true,
-            ])
-            ->add('code', HiddenType::class, ['data' => $shortCode])
-            ->add('save', SubmitType::class, ['label' => 'Create Short Link']);
-
-        $form = $formBuilder->getForm();
+        $sl = ['code' => $this->createShortLink(5)];
+        $form = $this->createForm(ShortLinkCreate::class, $sl);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
             $data = $form->getData();
             $shortLink = new ShortLink();
-            $shortLink->setFullUrl($data['fullUrl']);
-            $shortLink->setShortCode($data['code']);
+            $shortLink -> setShortCode($data['code']);
+            $shortLink -> setFullUrl($data['fullUrl']);
             $em = $this->getDoctrine()->getManager();
             $em->persist($shortLink);
             $em->flush();
             return $this->redirectToRoute('short_links_list');
         }
 
-        return $this->render('short-link/create.html.twig', ['form' => $form->createView()]);
+        return $this->render('short-link/create.html.twig', ['form' => $form->createView(),]);
     }
 
     /**
@@ -70,7 +57,6 @@ class ShortLinkCrudController extends AbstractController
      */
     public function edit(Request $request, ShortLink $shortLink)
     {
-//        dump($shortLink);die;
         $form = $this->createForm(ShortLinkType::class, $shortLink);
 
         $form->handleRequest($request);

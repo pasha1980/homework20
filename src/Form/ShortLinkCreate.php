@@ -1,6 +1,8 @@
 <?php
 
+
 namespace App\Form;
+
 
 use App\Controller\ShortLinkCrudController;
 use App\Entity\ShortLink;
@@ -11,21 +13,25 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ShortLinkType extends AbstractType
+class ShortLinkCreate extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $shortCode = $options['data']['code'];
         $builder
-            ->add('fullUrl')
-            ->add('shortCode', TextType::class, ['help' => 'Minimum 3 symbols required',])
+            ->add('fullUrl', TextType::class)
+            ->add('shortCode', TextType::class, [
+                'data' => $shortCode,
+                'disabled' => true,
+            ])
+            ->add('code', HiddenType::class, [
+                'data' => $shortCode,
+            ])
             ->add('Save', SubmitType::class)
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'data_class' => ShortLink::class,
-        ]);
     }
 }
