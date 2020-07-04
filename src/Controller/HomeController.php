@@ -5,6 +5,7 @@ namespace App\Controller;
 
 
 use App\Entity\User;
+use App\Form\EndRegistration;
 use App\Form\PhoneType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,6 +24,7 @@ class HomeController extends AbstractController
         {
             $logged = true;
             $phone = $user -> getPhone();
+            $email = $user -> getEmail();
 
             if ($phone == 'no')
             {
@@ -30,19 +32,44 @@ class HomeController extends AbstractController
             } else {
                 $issetPhone = true;
             }
+
+            if ($email == 'no')
+            {
+                $issetEmail = false;
+            } else {
+                $issetEmail = true;
+            }
+
         } else {
             $logged = false;
             $issetPhone = false;
+            $issetEmail = false;
         }
 
-        $form = $this -> createForm(PhoneType::class, new User());
+        if ($issetEmail)
+        {
+            $form = $this -> createForm(PhoneType::class, new User());
+        } else {
+            $form = $this -> createForm(EndRegistration::class, new User());
+        }
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
             $newPhone = $form->getData()->getPhone();
+
+            if (!$issetEmail)
+            {
+                $newEmail = $form->getData()->getEmail();
+            }
             $em = $this->getDoctrine()->getManager();
             $user -> setPhone($newPhone);
+
+            if (!$issetEmail)
+            {
+                $user -> setEmail($newEmail);
+            }
+
             $em -> persist($user);
             $em->flush();
 

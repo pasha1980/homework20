@@ -52,11 +52,13 @@ class UserRegistrationController extends AbstractController
 
         $githubUrl = $socialAuthConfig -> getGithubUrl();
         $googleUrl = $socialAuthConfig -> getGoogleUrl();
+        $facebookUrl = $socialAuthConfig -> getFacebookUrl();
 
         return $this->render('/user-registration/register.html.twig', [
             'form' => $form->createView(),
             'github_url' => $githubUrl,
             'google_url' => $googleUrl,
+            'facebook_url' => $facebookUrl,
         ]);
     }
 }

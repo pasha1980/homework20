@@ -23,13 +23,6 @@ class SocialAuthController extends AbstractController
 
     public function githubCallback(Request $request, GuardAuthenticatorHandler $handler, LoginFormAuthenicator $authenticator)
     {
-        //        Client ID
-        //597984a0e83f563d832d
-        //
-        //Client Secret
-        //00026b0739272712b7273ddf0e16bfe1c7f677c0
-        //
-
         if($code = $request->get('code')) {
             $client = HttpClient::create();
             $response = $client->request(
@@ -80,16 +73,16 @@ class SocialAuthController extends AbstractController
                 $user = new User();
                 $user->setEmail($userEmail);
                 $user->setName($name);
-                $user->setPassword(password_hash('jdf3kjfodi33453', PASSWORD_ARGON2ID));
+                $user->setPassword(password_hash('jdf3kjhtsg$TEfWH.github.ifodi33453', PASSWORD_ARGON2ID));
                 $user->setPhone('no');
                 $em->persist($user);
                 $em->flush();
             }
 
             $handler->authenticateUserAndHandleSuccess($user, $request, $authenticator, 'main');
-
-            return $this->redirectToRoute('homepage');
         }
+
+        return $this->redirectToRoute('homepage');
     }
 
     /**
@@ -105,11 +98,16 @@ class SocialAuthController extends AbstractController
 
         $code = $request ->get('code');
 
+        if (!isset($code))
+        {
+            echo 'Problem with login';
+        }
+
         try {
             $token = $client -> fetchAccessTokenWithAuthCode($code);
             $client -> setAccessToken($token);
         } catch (\Exception $e) {
-            echo $e -> getMessage();
+            echo $e -> getMessage(); die;
         }
 
         $userData = $client -> verifyIdToken();
@@ -125,14 +123,13 @@ class SocialAuthController extends AbstractController
             $user = new User();
             $user->setEmail($email);
             $user->setName($name);
-            $user->setPassword(password_hash('jdf3kjhtsg$TEfWH#ifodi33453', PASSWORD_ARGON2ID));
+            $user->setPassword(password_hash('jdf3kjhtsg$TEfWH.google.ifodi33453', PASSWORD_ARGON2ID));
             $user->setPhone('no');
             $em->persist($user);
             $em->flush();
         }
 
         $handler->authenticateUserAndHandleSuccess($user, $request, $authenticator, 'main');
-
 
         return $this->redirectToRoute('homepage');
     }
@@ -145,6 +142,65 @@ class SocialAuthController extends AbstractController
      */
     public function facebookCallback(Request $request, GuardAuthenticatorHandler $handler, LoginFormAuthenicator $authenticator)
     {
+        $code = $request -> get('code');
+
+        if (!isset($code))
+        {
+            echo 'Problem with login';
+            die;
+        }
+
+        $params = SocialAuthConfigController::getFacebookParams($code);
+
+        try {
+            $token = file_get_contents('https://graph.facebook.com/oauth/access_token?' . urldecode(http_build_query($params)));
+            $token = json_decode($token, true);
+        } catch (\Exception $e) {
+            $e -> getMessage(); die;
+        }
+
+        if (isset($token['access_token'])) {
+            $params = array(
+                'access_token' => $token['access_token'],
+                'fields'       => 'email,name'
+            );
+
+            try {
+                $userData = file_get_contents('https://graph.facebook.com/me?' . urldecode(http_build_query($params)));
+                $userData = json_decode($userData, true);
+            } catch (\Exception $e) {
+                $e -> getMessage(); die;
+            }
+
+        }
+
+        $em = $this -> getDoctrine() -> getManager();
+
+        $name = $userData['name'];
+
+        if (isset($userData['email']))
+        {
+            $email = $userData['email'];
+            $user = $em->getRepository(User::class)->findOneBy(['email' => $email]);
+
+        } else {
+            $email = 'no';
+            $user = $em->getRepository(User::class)->findOneBy(['name' => $name]);
+        }
+
+        if (!$user) {
+            $user = new User();
+            $user->setEmail($email);
+            $user->setName($name);
+            $user->setPassword(password_hash('jdf3kjhtsg$TEfWH.facebook.ifodi33453', PASSWORD_ARGON2ID));
+            $user->setPhone('no');
+            $em->persist($user);
+            $em->flush();
+        }
+
+        $handler->authenticateUserAndHandleSuccess($user, $request, $authenticator, 'main');
+
+        return $this->redirectToRoute('homepage');
 
     }
 

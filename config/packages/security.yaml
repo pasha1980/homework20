@@ -41,5 +41,6 @@ security:
          - { path: ^/$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
          - { path: ^/github-callback$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
          - { path: ^/google-callback$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+         - { path: ^/facebook-callback$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
          - { path: ^/top_links$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
          - { path: ^/, roles: ROLE_USER }
