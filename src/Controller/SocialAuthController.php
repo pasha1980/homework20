@@ -81,7 +81,7 @@ class SocialAuthController extends AbstractController
                 $user->setEmail($userEmail);
                 $user->setName($name);
                 $user->setPassword(password_hash('jdf3kjfodi33453', PASSWORD_ARGON2ID));
-                $user->setPhone('00000000000');
+                $user->setPhone('no');
                 $em->persist($user);
                 $em->flush();
             }
@@ -126,7 +126,7 @@ class SocialAuthController extends AbstractController
             $user->setEmail($email);
             $user->setName($name);
             $user->setPassword(password_hash('jdf3kjhtsg$TEfWH#ifodi33453', PASSWORD_ARGON2ID));
-            $user->setPhone('00000000000');
+            $user->setPhone('no');
             $em->persist($user);
             $em->flush();
         }

@@ -24,7 +24,7 @@ class HomeController extends AbstractController
             $logged = true;
             $phone = $user -> getPhone();
 
-            if ($phone == '00000000000')
+            if ($phone == 'no')
             {
                 $issetPhone = false;
             } else {
