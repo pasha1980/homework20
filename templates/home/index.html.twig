@@ -2,4 +2,16 @@
 
 {% block title %}Home page{% endblock %}
 
-{% block body %}<h1>Welcome to Kokos!</h1>{% endblock %}
+{% block body %}
+    <h1>Welcome to Kokos!</h1>
+    <br>
+    {% if logged %}
+    {% if issetPhone %}
+    {% else %}
+    Для завершения регистрации введите пожалуйста Ваш номер телефона <br>
+    {{ form(form) }}
+    {% endif %}
+    {% else %}
+    {% endif %}
+
+{% endblock %}

@@ -81,7 +81,7 @@ class SocialAuthController extends AbstractController
                 $user->setEmail($userEmail);
                 $user->setName($name);
                 $user->setPassword(password_hash('jdf3kjfodi33453', PASSWORD_ARGON2ID));
-                $user->setPhone('+3800000000000');
+                $user->setPhone('00000000000');
                 $em->persist($user);
                 $em->flush();
             }
@@ -126,7 +126,7 @@ class SocialAuthController extends AbstractController
             $user->setEmail($email);
             $user->setName($name);
             $user->setPassword(password_hash('jdf3kjhtsg$TEfWH#ifodi33453', PASSWORD_ARGON2ID));
-            $user->setPhone('0');
+            $user->setPhone('00000000000');
             $em->persist($user);
             $em->flush();
         }
@@ -136,4 +136,16 @@ class SocialAuthController extends AbstractController
 
         return $this->redirectToRoute('homepage');
     }
+
+    /**
+     * @Route("/facebook-callback")
+     * @param Request $request
+     * @param GuardAuthenticatorHandler $handler
+     * @param LoginFormAuthenicator $authenticator
+     */
+    public function facebookCallback(Request $request, GuardAuthenticatorHandler $handler, LoginFormAuthenicator $authenticator)
+    {
+
+    }
+
 }

@@ -8,6 +8,14 @@ class SocialAuthConfigController
 {
     public function getGithubUrl() :string
     {
+        /* GitHub
+        Client ID
+        597984a0e83f563d832d
+
+        Client Secret
+        00026b0739272712b7273ddf0e16bfe1c7f677c0
+        */
+
         $clientId = '597984a0e83f563d832d';
         $githubUrl = 'https://github.com/login/oauth/authorize';
 
@@ -34,12 +42,13 @@ class SocialAuthConfigController
     public function getGoogleClient() :object
     {
         /* Google
-        Code
+        Client ID
         794142538438-ieuk05aohr6b3c1tadnltummj8t9jtqu.apps.googleusercontent.com
 
-        Secret
+        Client Secret
         iW7RAoLa7LZ_lshb7nRMfUVc
         */
+
         $clientID = '794142538438-ieuk05aohr6b3c1tadnltummj8t9jtqu.apps.googleusercontent.com';
         $clientSecret = 'iW7RAoLa7LZ_lshb7nRMfUVc';
         $redirectUri = 'http://localhost:8000/google-callback';
