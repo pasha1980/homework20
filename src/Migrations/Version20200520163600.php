@@ -19,6 +19,8 @@ final class Version20200520163600 extends AbstractMigration
 
     public function up(Schema $schema) : void
     {
+        $this->connection->beginTransaction();
+
         $this->addSql('INSERT INTO `short_links` SET
                 full_url = :fullUrl,
                 short_code = :shortCode,

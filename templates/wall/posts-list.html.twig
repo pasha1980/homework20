@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Posts{% endblock %}
+
+{% block body %}
+    <h1>My Posts</h1>
+    <div class="row">
+    {% for post in posts %}
+        <div class="col-4">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ post.title }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ post.createdAt | date("d.m.Y") }}</h6>
+                    <p class="card-text">{{ post.content|raw }}</p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+    {{ form(form) }}
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base.html.twig" %}
+
+{% block title %}User regitration{% endblock %}
+
+{% block body %}
+    <h1>Register!</h1>
+    {{ form(form) }}
+    <br>
+    <a href="{{ github_url }}">Register via GitHub</a>
+    <br>
+    <a href="{{ google_url }}">Register via Google</a>
+{% endblock %}

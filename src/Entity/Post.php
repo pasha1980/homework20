@@ -2,14 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\StatisticRepository;
+use App\Repository\PostRepository;
+use App\Service\ContentInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=StatisticRepository::class)
- * @ORM\Table(name="statistics")
+ * @ORM\Entity(repositoryClass=PostRepository::class)
+ * @ORM\Table(name="posts")
+ * @ORM\HasLifecycleCallbacks()
  */
-class Statistic
+class Post implements ContentInterface
 {
     /**
      * @ORM\Id()
@@ -19,20 +21,20 @@ class Statistic
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=500, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
-    private $userAgent;
+    private $title;
 
     /**
-     * @ORM\Column(type="string", length=15, nullable=true)
+     * @ORM\Column(type="text", nullable=false)
      */
-    private $ip;
+    private $content;
 
     /**
-     * @ORM\ManyToOne(targetEntity=ShortLink::class, inversedBy="statistics")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="posts")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $link;
+    private $user;
 
     /**
      * @ORM\Column(type="datetime")
@@ -50,43 +52,52 @@ class Statistic
         $this->setUpdatedAt(new \DateTime());
     }
 
+    /**
+     * @throws \Exception
+     * @ORM\PreUpdate()
+     */
+    public function setUpdatedAtAsCurrent()
+    {
+        $this->setUpdatedAt(new \DateTime());
+    }
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUserAgent(): ?string
+    public function getTitle(): ?string
     {
-        return $this->userAgent;
+        return $this->title;
     }
 
-    public function setUserAgent(?string $userAgent): self
+    public function setTitle(string $title): self
     {
-        $this->userAgent = $userAgent;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getIp(): ?string
+    public function getContent(): ?string
     {
-        return $this->ip;
+        return $this->content;
     }
 
-    public function setIp(?string $ip): self
+    public function setContent(string $content): self
     {
-        $this->ip = $ip;
+        $this->content = $content;
 
         return $this;
     }
 
-    public function getLink(): ?ShortLink
+    public function getUser(): ?User
     {
-        return $this->link;
+        return $this->user;
     }
 
-    public function setLink(?ShortLink $link): self
+    public function setUser(?User $user): self
     {
-        $this->link = $link;
+        $this->user = $user;
 
         return $this;
     }
